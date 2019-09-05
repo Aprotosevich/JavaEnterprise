@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:musicPlayer.properties"/>
+    <context:component-scan base-package="by.pvt.springAnnotation"></context:component-scan>
+
+    <bean id="testBean"
+          class="by.pvt.springHomeProject.TestBean">
+        <constructor-arg value="Antony"/>
+    </bean>
+
+    <bean id="classicMusic"
+          class="by.pvt.springHomeProject.ClassicMusic">
+    </bean>
+
+    <bean id="rockMusic"
+          class="by.pvt.springHomeProject.RockMusic" init-method="doInit" destroy-method="doDestroy">
+    </bean>
+
+    <bean id="MPlayerWithRock"
+    class="by.pvt.springHomeProject.MusicPlayer">
+        <constructor-arg ref="rockMusic"></constructor-arg>
+    </bean>
+
+    <bean id="popMusic"
+          class="by.pvt.springHomeProject.PopMusic"></bean>
+    
+    <bean id="Mplayer"
+          class="by.pvt.springHomeProject.MusicPlayer">
+        <property name="music" ref="classicMusic"></property>
+
+        <property name="name" value="${musicPlayer.name}"></property>
+        <property name="volume" value="${musicPlayer.volume}"></property>
+    </bean>
+
+    <bean id="ListMultiMusicPlayer" class="java.util.ArrayList">
+    <constructor-arg>
+        <list>
+            <ref bean="classicMusic" />
+            <ref bean="rockMusic" />
+            <ref bean="popMusic" />
+        </list>
+    </constructor-arg>
+</bean>
+
+    <bean id="MultiMusicPlayer" class="by.pvt.springHomeProject.MultiMusicPlayer">
+        <property name="musicList" ref="ListMultiMusicPlayer"></property>
+    </bean>
+
+    <bean id="metalMusic" class="by.pvt.springHomeProject.MetalMusic" scope="prototype"
+    init-method="doInit" destroy-method="doDestroy"
+    factory-method="getMetalMusicInstance">
+
+    </bean>
+</beans>
